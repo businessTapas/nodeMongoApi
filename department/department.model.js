@@ -2,13 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    username: { type: String, unique: true, required: true },
-    hash: { type: String, required: true },
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
+    departmentname: { type: String, unique: true, required: true },
+    description: { type: String, required: true },
     createdDate: { type: Date, default: Date.now }
 });
- 
+
 schema.set('toJSON', {
     virtuals: true,
     versionKey: false,
@@ -18,4 +16,4 @@ schema.set('toJSON', {
     }
 });
 
-module.exports = mongoose.model('User', schema);
+module.exports = mongoose.model('Department', schema);
