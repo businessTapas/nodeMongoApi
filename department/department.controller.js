@@ -14,7 +14,7 @@ module.exports = router;
 
 function create(req, res, next) {
     departmentService.create(req.body)
-        .then(() => res.json({message: 'User registered successfully'}))
+        .then(() => res.json({message: 'Department created successfully'}))
         .catch(err => next(err));
 }
 

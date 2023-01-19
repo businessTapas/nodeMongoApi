@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
+    departmentId: { type: mongoose.Schema.Types.ObjectId,ref: 'Department' },
     username: { type: String, unique: true, required: true },
     hash: { type: String, required: true },
     firstname: { type: String, required: true },

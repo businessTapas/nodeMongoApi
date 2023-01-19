@@ -4,9 +4,8 @@ const connectionOptions = { useCreateIndex: true, useNewUrlParser: true, useUnif
 mongoose.connect(process.env.MONGODB_URI || config.connectionString, connectionOptions);
 mongoose.Promise = global.Promise;
 
-module.exports = {
-    User: require('../users/user.model')
-};
-module.exports = {
-    Department: require('../department/department.model')
-};
+    const User = require('../users/user.model')
+    const Department = require('../department/department.model')
+ module.exports = {
+    User, Department
+}
