@@ -31,13 +31,14 @@ async function create(userParam) {
 
 async function update(id, userParam) {
     const department = await Department.findById(id);
-
+//console.log(department);
     // validate
     if (!department)
      throw 'Department not found';
-    if (department.departmentname !== userParam.departmentname && await User.findOne({ departmentname: userParam.departmentname })) {
+    if (department.departmentname !== userParam.departmentname && await Department.findOne({ departmentname: userParam.departmentname })) {
         throw 'Department name "' + userParam.departmentname + '" is already taken';
     }
+    Object.assign(department, userParam);
     
     await department.save();
 }

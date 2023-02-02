@@ -1,3 +1,4 @@
+const e = require('express');
 const express = require('express');
 const router = express.Router();
 const departmentService = require('./department.service'); 
@@ -31,6 +32,7 @@ function getById(req, res, next) {
 }
 
 function update(req, res, next) {
+    //console.log(req.params.id);
     departmentService.update(req.params.id, req.body)
         .then(() => res.json({}))
         .catch(err => next(err));
