@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('_helpers/db');
 const User = db.User;
+const fs = require('fs');
 
 module.exports = {
     authenticate,
@@ -27,7 +28,7 @@ async function authenticate(userParam) {
 }
 
 async function getAll() {
-    return await User.find();
+    return await User.find().populate({path:"departmentId", select:["departmentname"]});
 }
 
 async function getById(id) {
@@ -52,8 +53,8 @@ async function create(userParam) {
 }
 
 async function update(id, userParam) {
+   // console.log(userParam);
     const user = await User.findById(id);
-
     // validate
     if (!user) throw 'User not found';
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
@@ -64,8 +65,20 @@ async function update(id, userParam) {
     if (userParam.password) {
         userParam.hash = bcrypt.hashSync(userParam.password, 10);
     }
+    if (userParam.imagefile !== undefined && userParam.imagefile != '' && user.imagefile !== undefined && user.imagefile != ''){    
+        fs.unlink(user.imagefile, (err) => {
+            if (err) {
+                throw err;
+            }
+        
+            console.log("Delete Previous File successfully.");
+        });
+    }
 
-    // copy userParam properties to user
+    if ( userParam.imagefile == '' && user.imagefile !== undefined && user.imagefile != '') {    
+        userParam.imagefile = user.imagefile;
+    }
+        // copy userParam properties to user
     Object.assign(user, userParam);
 
     await user.save();

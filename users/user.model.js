@@ -7,7 +7,8 @@ const schema = new Schema({
     hash: { type: String, required: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
-    createdDate: { type: Date, default: Date.now }
+    createdDate: { type: Date, default: Date.now },
+    imagefile: { type: String }
 });
  
 schema.set('toJSON', {
