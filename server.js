@@ -1,4 +1,5 @@
-﻿require('rootpath')();
+﻿ require('rootpath')();
+ const path = require('node:path');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -6,8 +7,8 @@ const bodyParser = require('body-parser');
 const jwt = require('_helpers/jwt');
 const errorHandler = require('_helpers/error-handler');
 const db = require('_helpers/db');
-/*
-app.use((req, res, next) => {
+
+/* app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'x-www-form-urlencoded, Origin, X-Requested-With, Content-Type, Accept, Authorization, *');
     if (req.method === 'OPTIONS'){
@@ -16,8 +17,9 @@ app.use((req, res, next) => {
         return res.status(200).json({});
     }
     next();
-});
-*/
+}); */
+
+app.use('/public/uploads', express.static(path.join(__dirname, '/public/uploads'))); // to access file from outside ( like angular )
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -26,6 +28,7 @@ app.use(cors());
 app.use(jwt());
 
 // api routes
+//app.use('/public', require('./users/users.controller'));
 app.use('/users', require('./users/users.controller'));
 app.use('/department', require('./department/department.controller'));
 

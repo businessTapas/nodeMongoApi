@@ -54,7 +54,8 @@ async function create(userParam) {
 
 async function update(id, userParam) {
    // console.log(userParam);
-    const user = await User.findById(id);
+   var unlinkFlag = 1;  
+   const user = await User.findById(id);
     // validate
     if (!user) throw 'User not found';
     if (user.username !== userParam.username && await User.findOne({ username: userParam.username })) {
@@ -65,17 +66,28 @@ async function update(id, userParam) {
     if (userParam.password) {
         userParam.hash = bcrypt.hashSync(userParam.password, 10);
     }
-    if (userParam.imagefile !== undefined && userParam.imagefile != '' && user.imagefile !== undefined && user.imagefile != ''){    
-        fs.unlink(user.imagefile, (err) => {
-            if (err) {
-                throw err;
-            }
+    if ( userParam.imagefile != '' && user.imagefile != '' ) {  
+        if (fs.existsSync(user.imagefile)) {
+            console.log('file exists');
+          } else {
+            unlinkFlag = 0;
+            console.log('file not found!');
+          }
+         
+        if (unlinkFlag == 1) {
+            console.log('unlinkFlag:  '+unlinkFlag);
+            await fs.unlink(user.imagefile, (err) => {
+                if (err) {
+                    throw err;
+                }
+            
+                console.log("Delete Previous File successfully.");
+            });
+        }
         
-            console.log("Delete Previous File successfully.");
-        });
     }
 
-    if ( userParam.imagefile == '' && user.imagefile !== undefined && user.imagefile != '') {    
+    if ( userParam.imagefile == '' &&  user.imagefile != '') {    
         userParam.imagefile = user.imagefile;
     }
         // copy userParam properties to user
@@ -87,3 +99,10 @@ async function update(id, userParam) {
 async function _delete(id) {
     await User.findByIdAndRemove(id);
 }
+
+async function chkFileExist(imageurl) {
+    await fs.access(imageurl, (err) => {
+        if (err)
+        throw err;
+    });
+} 
